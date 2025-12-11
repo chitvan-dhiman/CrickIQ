@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Performance | CrickIQ - Smart Cricket Analytics</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #0dcaf0;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-radius: 12px;
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #0d6efd;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        body {
+            background: var(--bg-color);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-primary);
+            transition: var(--transition);
+            padding-top: 70px;
+            padding-bottom: 80px;
+        }
+
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            background: var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo img {
+            height: 32px;
+			border-radius: 23%;
+        }
+
+        .header-icons i, .header-left i {
+            font-size: 20px;
+            cursor: pointer;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .header-icons i:hover, .header-left i:hover {
+            transform: scale(1.1);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100%;
+            background: var(--card-bg);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            z-index: 1040;
+            padding: 80px 20px 20px;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1039;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 12px 15px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            margin-bottom: 5px;
+            transition: var(--transition);
+        }
+
+        .sidebar a:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Performance Cards */
+        .performance-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .performance-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Search Box */
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(0,0,0,0.1);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        /* Tab Navigation */
+        .stats-tabs {
+            display: flex;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 5px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .stats-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px 10px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .stats-tab.active {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 2px 8px rgba(13, 110, 253, 0.3);
+        }
+
+        /* Stats Cards */
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Player Table */
+        .player-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .player-table th {
+            background: rgba(13, 110, 253, 0.1);
+            color: var(--primary-color);
+            font-weight: 600;
+            padding: 12px 10px;
+            text-align: left;
+            font-size: 0.85rem;
+            border-bottom: 2px solid rgba(13, 110, 253, 0.2);
+        }
+
+        .player-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.9rem;
+        }
+
+        .player-table tr {
+            transition: var(--transition);
+        }
+
+        .player-table tr:hover {
+            background: rgba(13, 110, 253, 0.05);
+        }
+
+        .player-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-right: 10px;
+        }
+
+        .player-name {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .performance-badge {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .badge-high {
+            background: rgba(25, 135, 84, 0.1);
+            color: var(--success-color);
+        }
+
+        .badge-medium {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--warning-color);
+        }
+
+        .badge-low {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger-color);
+        }
+
+        /* Bottom Navigation */
+        .app-bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 70px;
+            background: var(--card-bg);
+            border-top: 1px solid rgba(0,0,0,0.1);
+            z-index: 1030;
+            padding: 0 10px;
+        }
+
+        .app-bottom-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.75rem;
+            text-align: center;
+            flex: 1;
+            padding: 8px 5px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .app-bottom-nav a i {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        .app-bottom-nav a.active {
+            color: var(--primary-color);
+            background: rgba(13, 110, 253, 0.1);
+        }
+
+        .app-bottom-nav a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* Loading Animation */
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        [data-theme="dark"] .loading-skeleton {
+            background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .performance-card {
+                padding: 15px;
+            }
+            
+            .stats-overview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .player-table {
+                font-size: 0.8rem;
+            }
+            
+            .player-table th,
+            .player-table td {
+                padding: 8px 6px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .player-name {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <a href="../index.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="../start_match/start_match.html"><i class="fa-solid fa-play"></i> Start Match</a>
+        <a href="../team_list/team_list.html"><i class="fa-solid fa-users"></i> Teams</a>
+        <a href="performance.html"><i class="fa-solid fa-chart-line"></i> Performance</a>
+        <a href="../contact_us/contact_us.html"><i class="fa-solid fa-envelope"></i> Contact Us</a>
+        <a href="#" id="themeToggle"><i class="fa-solid fa-moon"></i> Dark Mode</a>
+    </div>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-left">
+            <i id="sidebarToggle" class="fa-solid fa-bars"></i>
+        </div>
+        <div class="logo">
+            <img src="../assets/images/logo.png" alt="CrickIQ Logo">
+        </div>
+        <div class="header-icons">
+            <i id="darkModeToggle" class="fa-solid fa-moon"></i>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mt-3">
+        <!-- Stats Overview -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-value" id="totalPlayers">24</div>
+                <div class="stat-label">Total Players</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalMatches">156</div>
+                <div class="stat-label">Matches Played</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalRuns">8,425</div>
+                <div class="stat-label">Total Runs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalWickets">189</div>
+                <div class="stat-label">Wickets Taken</div>
+            </div>
+        </div>
+
+        <!-- Performance Card -->
+        <div class="performance-card">
+            <!-- Search Box -->
+            <div class="search-container">
+                <input type="text" placeholder="Search players..." class="search-box" id="searchInput">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+
+            <!-- Stats Tabs -->
+            <div class="stats-tabs">
+                <div class="stats-tab active" data-tab="batsmen">
+                    <i class="fas fa-baseball-bat-ball me-1"></i> Batsmen
+                </div>
+                <div class="stats-tab" data-tab="bowlers">
+                    <i class="fas fa-baseball me-1"></i> Bowlers
+                </div>
+                <div class="stats-tab" data-tab="all-rounders">
+                    <i class="fas fa-user-group me-1"></i> All-rounders
+                </div>
+            </div>
+
+            <!-- Player Table -->
+            <div class="table-responsive">
+                <table class="player-table" id="playerTable">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Matches</th>
+                            <th>Runs</th>
+                            <th>Wickets</th>
+                            <th>Average</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="playerTableBody">
+                        <!-- Dynamic content will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State (initially hidden) -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fas fa-user-slash"></i>
+                <h5>No Players Found</h5>
+                <p class="text-muted">Try adjusting your search or add new players</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="app-bottom-nav">
+        <a href="../index.html">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="../team_list/team_list.html">
+            <i class="fa-solid fa-users"></i>
+            <span>Teams</span>
+        </a>
+        <a href="../start_match/start_match.html">
+            <i class="fa-solid fa-play"></i>
+            <span>Match</span>
+        </a>
+        <a href="performance.html" class="active">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Stats</span>
+        </a>
+    </nav>
+
+    <script>
+        class PerformancePage {
+            constructor() {
+                this.currentTab = 'batsmen';
+                this.allPlayers = [];
+                this.filteredPlayers = [];
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.loadTheme();
+                this.loadPlayerData();
+                this.renderTable();
+            }
+
+            setupEventListeners() {
+                // Sidebar toggle
+                document.getElementById('sidebarToggle').addEventListener('click', () => this.toggleSidebar());
+                document.getElementById('sidebarOverlay').addEventListener('click', () => this.toggleSidebar());
+
+                // Theme toggle
+                document.getElementById('darkModeToggle').addEventListener('click', () => this.toggleTheme());
+
+                // Tab switching
+                document.querySelectorAll('.stats-tab').forEach(tab => {
+                    tab.addEventListener('click', (e) => this.switchTab(e.target.dataset.tab));
+                });
+
+                // Search functionality
+                document.getElementById('searchInput').addEventListener('input', (e) => this.filterPlayers(e.target.value));
+
+                // Close sidebar when clicking on links
+                document.querySelectorAll('.sidebar a').forEach(link => {
+                    link.addEventListener('click', () => this.toggleSidebar());
+                });
+            }
+
+            toggleSidebar() {
+                document.getElementById('sidebar').classList.toggle('active');
+                document.getElementById('sidebarOverlay').classList.toggle('active');
+            }
+
+            toggleTheme() {
+                const currentTheme = document.body.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.body.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                this.updateThemeIcon(newTheme);
+            }
+
+            updateThemeIcon(theme) {
+                const icon = document.getElementById('darkModeToggle');
+                if (theme === 'dark') {
+                    icon.className = 'fa-solid fa-sun';
+                } else {
+                    icon.className = 'fa-solid fa-moon';
+                }
+            }
+
+            loadTheme() {
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.body.setAttribute('data-theme', savedTheme);
+                this.updateThemeIcon(savedTheme);
+            }
+
+            loadPlayerData() {
+                // Sample data - replace with actual data from your storage
+                this.allPlayers = {
+                    batsmen: [
+                        { id: 1, name: 'Rahul K', matches: 20, runs: 850, wickets: 2, average: 42.5, status: 'high' },
+                        { id: 2, name: 'Virat R', matches: 18, runs: 720, wickets: 0, average: 40.0, status: 'high' },
+                        { id: 3, name: 'Sachin T', matches: 25, runs: 1120, wickets: 5, average: 56.0, status: 'high' },
+                        { id: 4, name: 'Rohit S', matches: 15, runs: 480, wickets: 1, average: 32.0, status: 'medium' },
+                        { id: 5, name: 'Shikhar D', matches: 12, runs: 320, wickets: 0, average: 26.7, status: 'medium' }
+                    ],
+                    bowlers: [
+                        { id: 6, name: 'Jadeja R', matches: 22, runs: 120, wickets: 28, average: 14.3, status: 'high' },
+                        { id: 7, name: 'Bumrah J', matches: 20, runs: 45, wickets: 32, average: 18.2, status: 'high' },
+                        { id: 8, name: 'Shami M', matches: 18, runs: 38, wickets: 24, average: 22.5, status: 'medium' },
+                        { id: 9, name: 'Ashwin R', matches: 16, runs: 85, wickets: 19, average: 25.8, status: 'medium' },
+                        { id: 10, name: 'Chahal Y', matches: 14, runs: 25, wickets: 16, average: 28.4, status: 'low' }
+                    ],
+                    'all-rounders': [
+                        { id: 11, name: 'Hardik P', matches: 19, runs: 420, wickets: 18, average: 35.0, status: 'high' },
+                        { id: 12, name: 'Ben S', matches: 12, runs: 280, wickets: 14, average: 27.5, status: 'medium' },
+                        { id: 13, name: 'Ravindra J', matches: 8, runs: 150, wickets: 9, average: 22.3, status: 'medium' }
+                    ]
+                };
+
+                this.filteredPlayers = [...this.allPlayers[this.currentTab]];
+            }
+
+            switchTab(tabName) {
+                this.currentTab = tabName;
+                
+                // Update active tab UI
+                document.querySelectorAll('.stats-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+                
+                // Update filtered players
+                this.filteredPlayers = [...this.allPlayers[tabName]];
+                
+                // Re-apply search filter if any
+                const searchValue = document.getElementById('searchInput').value;
+                if (searchValue) {
+                    this.filterPlayers(searchValue);
+                } else {
+                    this.renderTable();
+                }
+            }
+
+            filterPlayers(searchTerm) {
+                const term = searchTerm.toLowerCase().trim();
+                
+                if (term === '') {
+                    this.filteredPlayers = [...this.allPlayers[this.currentTab]];
+                } else {
+                    this.filteredPlayers = this.allPlayers[this.currentTab].filter(player => 
+                        player.name.toLowerCase().includes(term)
+                    );
+                }
+                
+                this.renderTable();
+            }
+
+            renderTable() {
+                const tableBody = document.getElementById('playerTableBody');
+                const emptyState = document.getElementById('emptyState');
+                
+                if (this.filteredPlayers.length === 0) {
+                    tableBody.innerHTML = '';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+                
+                emptyState.style.display = 'none';
+                
+                tableBody.innerHTML = this.filteredPlayers.map(player => `
+                    <tr>
+                        <td>
+                            <div class="player-name">
+                                <div class="player-avatar">
+                                    ${player.name.split(' ').map(n => n[0]).join('')}
+                                </div>
+                                ${player.name}
+                            </div>
+                        </td>
+                        <td>${player.matches}</td>
+                        <td>${player.runs}</td>
+                        <td>${player.wickets}</td>
+                        <td>${player.average}</td>
+                        <td>
+                            <span class="performance-badge badge-${player.status}">
+                                ${player.status === 'high' ? 'Excellent' : 
+                                  player.status === 'medium' ? 'Good' : 'Average'}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            updateStatsOverview() {
+                // Calculate and update overview stats
+                const totalPlayers = Object.values(this.allPlayers).flat().length;
+                const totalMatches = Object.values(this.allPlayers).flat().reduce((sum, player) => sum + player.matches, 0);
+                const totalRuns = Object.values(this.allPlayers).flat().reduce((sum, player) => sum + player.runs, 0);
+                const totalWickets = Object.values(this.allPlayers).flat().reduce((sum, player) => sum + player.wickets, 0);
+                
+                document.getElementById('totalPlayers').textContent = totalPlayers;
+                document.getElementById('totalMatches').textContent = totalMatches;
+                document.getElementById('totalRuns').textContent = totalRuns.toLocaleString();
+                document.getElementById('totalWickets').textContent = totalWickets;
+            }
+        }
+
+        // Initialize the performance page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const performancePage = new PerformancePage();
+            performancePage.updateStatsOverview();
+        });
+    </script>
+</body>
+
+</html>

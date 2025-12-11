@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CrickIQ - Smart Cricket Scoring</title>
+    <meta name="description" content="CrickIQ - Revolutionizing cricket scoring with intelligent analytics and real-time tracking">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="assets/images/logo.png" as="image">
+    <link rel="preload" href="index.html" as="document">
+    
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #a4e8f7;
+            --accent-color: #ff6b35;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--gradient);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            min-height: -webkit-fill-available;
+        }
+
+        /* Animated background elements */
+        .bg-bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .bg-bubbles li {
+            position: absolute;
+            list-style: none;
+            display: block;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.15);
+            bottom: -160px;
+            animation: square 20s infinite;
+            border-radius: 50%;
+            transition-timing-function: linear;
+        }
+
+        .bg-bubbles li:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .bg-bubbles li:nth-child(2) { left: 20%; width: 80px; height: 80px; animation-delay: 2s; animation-duration: 17s; }
+        .bg-bubbles li:nth-child(3) { left: 25%; animation-delay: 4s; }
+        .bg-bubbles li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 22s; }
+        .bg-bubbles li:nth-child(5) { left: 70%; animation-delay: 3s; }
+        .bg-bubbles li:nth-child(6) { left: 80%; width: 120px; height: 120px; animation-delay: 6s; animation-duration: 25s; }
+        .bg-bubbles li:nth-child(7) { left: 32%; width: 160px; height: 160px; animation-delay: 1s; animation-duration: 30s; }
+        .bg-bubbles li:nth-child(8) { left: 55%; width: 20px; height: 20px; animation-delay: 7s; animation-duration: 40s; }
+        .bg-bubbles li:nth-child(9) { left: 25%; width: 10px; height: 10px; animation-delay: 12s; animation-duration: 35s; }
+        .bg-bubbles li:nth-child(10) { left: 90%; width: 160px; height: 160px; animation-delay: 5s; animation-duration: 28s; }
+
+        @keyframes square {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
+        }
+
+        .splash-container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .logo-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: var(--shadow);
+            margin: 0 auto 25px auto;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            animation: pulse 2s infinite ease-in-out, float 3s infinite ease-in-out;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo-circle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-circle img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .slogan {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1.5s ease-out 0.5s both;
+        }
+
+        .sub-slogan {
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1.5s ease-out 1s both;
+        }
+
+        .progress-container {
+            width: 200px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            margin: 0 auto;
+            overflow: hidden;
+            animation: fadeIn 1.5s ease-out 1.5s both;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 10px;
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: progress 3s ease-in-out forwards;
+        }
+
+        .skip-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 3;
+        }
+
+        .skip-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes progress {
+            0% { transform: scaleX(0); }
+            100% { transform: scaleX(1); }
+        }
+
+        /* Loading dots */
+        .loading-dots {
+            display: inline-flex;
+            gap: 4px;
+            margin-top: 20px;
+        }
+
+        .loading-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { 
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .logo-circle {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .logo-circle img {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .slogan {
+                font-size: 1.2rem;
+            }
+            
+            .sub-slogan {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-circle {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .logo-circle img {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .slogan {
+                font-size: 1.1rem;
+            }
+            
+            .sub-slogan {
+                font-size: 0.8rem;
+            }
+            
+            body {
+                padding: 20px;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            .logo-circle, .bg-bubbles, .progress-bar, .loading-dots span {
+                animation: none;
+            }
+            
+            .logo-circle {
+                animation: fadeInUp 1s ease-out;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Animated background -->
+    <ul class="bg-bubbles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+
+    <!-- Skip button -->
+    <button class="skip-btn" id="skipBtn">
+        Skip <i class="fas fa-forward"></i>
+    </button>
+
+    <!-- Main content -->
+    <div class="splash-container">
+        <div class="logo-circle">
+            <img src="assets/images/logo.png" alt="CrickIQ Logo" 
+                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiByeD0iNjAiIGZpbGw9IiMwZDZlZmQiLz4KPHN2ZyB4PSIzMCIgeT0iMzAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiPgo8cGF0aCBkPSJNMTIgMTNWMTJNMTIgNlY3TTEyIDE4VjE3TTkgMTVIMTVNOSA5SDE1TTggMjFIMTZNMTYgOEgyME0yMSAxNkgyM002IDhIMkE0IDQgMCAwIDEgMiAxNkg2TTE4IDhIMjJBMiAyIDAgMCAxIDIyIDE2SDE4Ii8+Cjwvc3ZnPgo8L3N2Zz4K'">
+        </div>
+        
+        <h1 class="slogan">Cricket. Reimagined with IQ.</h1>
+        <p class="sub-slogan">Smart scoring • Real-time analytics • Offline support</p>
+        
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+        
+        <div class="loading-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <script>
+        class SplashScreen {
+            constructor() {
+                this.redirectTimer = null;
+                this.redirectTime = 4000; // 4 seconds
+                this.startTime = Date.now();
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.startRedirectTimer();
+                this.preloadHomePage();
+                this.checkPerformance();
+            }
+
+            setupEventListeners() {
+                // Skip button
+                document.getElementById('skipBtn').addEventListener('click', () => {
+                    this.redirectToHome();
+                });
+
+                // Allow clicking logo to skip (hidden feature)
+                document.querySelector('.logo-circle').addEventListener('dblclick', () => {
+                    this.redirectToHome();
+                });
+
+                // Keyboard skip
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
+                        this.redirectToHome();
+                    }
+                });
+            }
+
+            startRedirectTimer() {
+                this.redirectTimer = setTimeout(() => {
+                    this.redirectToHome();
+                }, this.redirectTime);
+            }
+
+            redirectToHome() {
+                // Clear the timer if user skips
+                if (this.redirectTimer) {
+                    clearTimeout(this.redirectTimer);
+                }
+
+                // Add fade-out animation
+                document.body.style.opacity = '0';
+                document.body.style.transition = 'opacity 0.3s ease';
+
+                // Redirect after fade-out completes
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 300);
+            }
+
+            preloadHomePage() {
+                // Preload the home page for faster navigation
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = 'index.html';
+                link.as = 'document';
+                document.head.appendChild(link);
+
+                // Also preload critical resources for home page
+                const criticalResources = [
+                    'assets/css/style.css',
+                    'assets/js/app.js'
+                ];
+
+                criticalResources.forEach(resource => {
+                    const preloadLink = document.createElement('link');
+                    preloadLink.rel = 'preload';
+                    preloadLink.href = resource;
+                    preloadLink.as = resource.endsWith('.css') ? 'style' : 'script';
+                    document.head.appendChild(preloadLink);
+                });
+            }
+
+            checkPerformance() {
+                // Log performance metrics
+                window.addEventListener('load', () => {
+                    const loadTime = Date.now() - this.startTime;
+                    console.log(`Splash screen loaded in ${loadTime}ms`);
+                    
+                    // If load time is too long, adjust animation timing
+                    if (loadTime > 1000) {
+                        document.querySelector('.progress-bar').style.animationDuration = '2s';
+                    }
+                });
+            }
+        }
+
+        // Initialize splash screen when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new SplashScreen();
+        });
+
+        // Service Worker registration for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+                // Page is being hidden, clear timer to prevent redirect while in background
+                if (window.splashScreen && window.splashScreen.redirectTimer) {
+                    clearTimeout(window.splashScreen.redirectTimer);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

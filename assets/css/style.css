@@ -1,0 +1,127 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+}
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+}
+main {
+  padding-top: 60px;
+  padding-bottom: 70px;
+}
+.app-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 6px 0;
+  height: 60px;
+  z-index: 1030;
+}
+.app-bottom-nav a {
+  color: #888;
+  text-decoration: none;
+  font-size: 14px;
+  text-align: center;
+  flex: 1;
+}
+.app-bottom-nav a i {
+  display: block;
+  font-size: 18px;
+}
+.app-bottom-nav a.active {
+  color: #0d6efd;
+}
+.app-bottom-nav span {
+  font-size: 12px;
+}
+
+/* Top Header */
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background-color: #0d6efd;
+  color: white;
+  z-index: 1030;
+}
+
+.app-header .logo img {
+  height: 36px;
+}
+
+.app-header .header-icons i {
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: 12px;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background: #ffffff; /* Lighter background */
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+  padding-top: 60px;
+  transition: 0.3s;
+  z-index: 1050;
+  border-right: 1px solid #e0e0e0;
+}
+
+/* General link style */
+.sidebar a {
+  display: block;
+  padding: 15px 20px;
+  color: #333;
+  font-size: 17px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+/* Contact Us link specifically */
+.sidebar a[href*="contact_us"] {
+  background-color: #0078d7; /* Bright blue */
+  color: #fff;
+  border-radius: 6px;
+  margin: 10px 15px;
+  text-align: center;
+}
+
+/* Hover effects */
+.sidebar a:hover {
+  background: #0d6efd;
+  color: #fff;
+}
+
+/* Icon spacing */
+.sidebar a i {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+/* Sidebar visible */
+.sidebar.show {
+  left: 0;
+}
+
+/* Dark mode */
+body.dark-mode { background: #121212; color: #f0f0f0; }
+body.dark-mode .app-bottom-nav { background: #1e1e1e; border-top-color: #333; }
+body.dark-mode .app-bottom-nav a { color: #f0f0f0; }
+body.dark-mode .app-bottom-nav a.active { color: #ffc107; }
+
+/* Main content padding for top & bottom bars */
+main { padding-top: 70px; padding-bottom: 70px; }

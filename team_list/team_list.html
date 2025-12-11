@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teams | CrickIQ - Team Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #0dcaf0;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-radius: 12px;
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #0d6efd;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        body {
+            background: var(--bg-color);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-primary);
+            transition: var(--transition);
+            padding-top: 70px;
+            padding-bottom: 80px;
+        }
+
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            background: var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo img {
+            height: 32px;
+			border-radius: 23%;
+        }
+
+        .header-icons i, .header-left i {
+            font-size: 20px;
+            cursor: pointer;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .header-icons i:hover, .header-left i:hover {
+            transform: scale(1.1);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100%;
+            background: var(--card-bg);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            z-index: 1040;
+            padding: 80px 20px 20px;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1039;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 12px 15px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            margin-bottom: 5px;
+            transition: var(--transition);
+        }
+
+        .sidebar a:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Teams Card */
+        .teams-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .teams-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Search Box */
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(0,0,0,0.1);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        /* Tab Navigation */
+        .teams-tabs {
+            display: flex;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 5px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .teams-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px 10px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .teams-tab.active {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 2px 8px rgba(13, 110, 253, 0.3);
+        }
+
+        /* Stats Cards */
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Teams Table */
+        .teams-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .teams-table th {
+            background: rgba(13, 110, 253, 0.1);
+            color: var(--primary-color);
+            font-weight: 600;
+            padding: 12px 10px;
+            text-align: left;
+            font-size: 0.85rem;
+            border-bottom: 2px solid rgba(13, 110, 253, 0.2);
+        }
+
+        .teams-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.9rem;
+        }
+
+        .teams-table tr {
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .teams-table tr:hover {
+            background: rgba(13, 110, 253, 0.05);
+            transform: translateX(5px);
+        }
+
+        .team-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), #667eea);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-right: 12px;
+        }
+
+        .team-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .team-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .team-meta {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .win-percentage {
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .win-high {
+            background: rgba(25, 135, 84, 0.1);
+            color: var(--success-color);
+        }
+
+        .win-medium {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--warning-color);
+        }
+
+        .win-low {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger-color);
+        }
+
+        /* Create Team Button */
+        .create-team-btn {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 1020;
+        }
+
+        .create-team-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(13, 110, 253, 0.4);
+        }
+
+        /* Bottom Navigation */
+        .app-bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 70px;
+            background: var(--card-bg);
+            border-top: 1px solid rgba(0,0,0,0.1);
+            z-index: 1030;
+            padding: 0 10px;
+        }
+
+        .app-bottom-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.75rem;
+            text-align: center;
+            flex: 1;
+            padding: 8px 5px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .app-bottom-nav a i {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        .app-bottom-nav a.active {
+            color: var(--primary-color);
+            background: rgba(13, 110, 253, 0.1);
+        }
+
+        .app-bottom-nav a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* Loading Animation */
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        [data-theme="dark"] .loading-skeleton {
+            background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .teams-card {
+                padding: 15px;
+            }
+            
+            .stats-overview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .teams-table {
+                font-size: 0.8rem;
+            }
+            
+            .teams-table th,
+            .teams-table td {
+                padding: 8px 6px;
+            }
+            
+            .team-avatar {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .team-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .team-avatar {
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <a href="../index.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="../start_match/start_match.html"><i class="fa-solid fa-play"></i> Start Match</a>
+        <a href="team_list.html"><i class="fa-solid fa-users"></i> Teams</a>
+        <a href="../performance/performance.html"><i class="fa-solid fa-chart-line"></i> Performance</a>
+        <a href="../contact_us/contact_us.html"><i class="fa-solid fa-envelope"></i> Contact Us</a>
+        <a href="#" id="themeToggle"><i class="fa-solid fa-moon"></i> Dark Mode</a>
+    </div>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-left">
+            <i id="sidebarToggle" class="fa-solid fa-bars"></i>
+        </div>
+        <div class="logo">
+            <img src="../assets/images/logo.png" alt="CrickIQ Logo">
+        </div>
+        <div class="header-icons">
+            <i id="darkModeToggle" class="fa-solid fa-moon"></i>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mt-3">
+        <!-- Stats Overview -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-value" id="totalTeams">8</div>
+                <div class="stat-label">Total Teams</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalMatches">156</div>
+                <div class="stat-label">Matches Played</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="activeTeams">6</div>
+                <div class="stat-label">Active Teams</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="winRate">62%</div>
+                <div class="stat-label">Overall Win Rate</div>
+            </div>
+        </div>
+
+        <!-- Teams Card -->
+        <div class="teams-card">
+            <!-- Search Box -->
+            <div class="search-container">
+                <input type="text" placeholder="Search teams..." class="search-box" id="searchTeam">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+
+            <!-- Teams Tabs -->
+            <div class="teams-tabs">
+                <div class="teams-tab active" data-tab="all">
+                    <i class="fas fa-users me-1"></i> All Teams
+                </div>
+                <div class="teams-tab" data-tab="my">
+                    <i class="fas fa-user-check me-1"></i> My Teams
+                </div>
+                <div class="teams-tab" data-tab="favorites">
+                    <i class="fas fa-star me-1"></i> Favorites
+                </div>
+            </div>
+
+            <!-- Teams Table -->
+            <div class="table-responsive">
+                <table class="teams-table" id="teamsTable">
+                    <thead>
+                        <tr>
+                            <th>Team</th>
+                            <th>Played</th>
+                            <th>Wins</th>
+                            <th>Losses</th>
+                            <th>Win %</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teamsTableBody">
+                        <!-- Dynamic content will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State (initially hidden) -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fas fa-users-slash"></i>
+                <h5>No Teams Found</h5>
+                <p class="text-muted">Try adjusting your search or create a new team</p>
+                <button class="btn btn-primary mt-2" onclick="showCreateTeamModal()">
+                    <i class="fas fa-plus me-2"></i>Create Team
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Create Team Button -->
+    <button class="create-team-btn" onclick="showCreateTeamModal()">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- Bottom Navigation -->
+    <nav class="app-bottom-nav">
+        <a href="../index.html">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="team_list.html" class="active">
+            <i class="fa-solid fa-users"></i>
+            <span>Teams</span>
+        </a>
+        <a href="../start_match/start_match.html">
+            <i class="fa-solid fa-play"></i>
+            <span>Match</span>
+        </a>
+        <a href="../performance/performance.html">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Stats</span>
+        </a>
+    </nav>
+
+    <!-- Create Team Modal -->
+    <div class="modal fade" id="createTeamModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create New Team</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createTeamForm">
+                        <div class="mb-3">
+                            <label class="form-label">Team Name</label>
+                            <input type="text" class="form-control" id="teamName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Team Captain</label>
+                            <input type="text" class="form-control" id="teamCaptain">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Team Color</label>
+                            <input type="color" class="form-control" id="teamColor" value="#0d6efd">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="createNewTeam()">Create Team</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class TeamsPage {
+            constructor() {
+                this.currentTab = 'all';
+                this.allTeams = [];
+                this.filteredTeams = [];
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.loadTheme();
+                this.loadTeamData();
+                this.renderTable();
+            }
+
+            setupEventListeners() {
+                // Sidebar toggle
+                document.getElementById('sidebarToggle').addEventListener('click', () => this.toggleSidebar());
+                document.getElementById('sidebarOverlay').addEventListener('click', () => this.toggleSidebar());
+
+                // Theme toggle
+                document.getElementById('darkModeToggle').addEventListener('click', () => this.toggleTheme());
+
+                // Tab switching
+                document.querySelectorAll('.teams-tab').forEach(tab => {
+                    tab.addEventListener('click', (e) => this.switchTab(e.target.dataset.tab));
+                });
+
+                // Search functionality
+                document.getElementById('searchTeam').addEventListener('input', (e) => this.filterTeams(e.target.value));
+
+                // Close sidebar when clicking on links
+                document.querySelectorAll('.sidebar a').forEach(link => {
+                    link.addEventListener('click', () => this.toggleSidebar());
+                });
+
+                // Team row click
+                document.addEventListener('click', (e) => {
+                    const row = e.target.closest('tr');
+                    if (row && row.parentElement.id === 'teamsTableBody') {
+                        this.viewTeamDetails(this.filteredTeams[row.rowIndex - 1]);
+                    }
+                });
+            }
+
+            toggleSidebar() {
+                document.getElementById('sidebar').classList.toggle('active');
+                document.getElementById('sidebarOverlay').classList.toggle('active');
+            }
+
+            toggleTheme() {
+                const currentTheme = document.body.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.body.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                this.updateThemeIcon(newTheme);
+            }
+
+            updateThemeIcon(theme) {
+                const icon = document.getElementById('darkModeToggle');
+                if (theme === 'dark') {
+                    icon.className = 'fa-solid fa-sun';
+                } else {
+                    icon.className = 'fa-solid fa-moon';
+                }
+            }
+
+            loadTheme() {
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.body.setAttribute('data-theme', savedTheme);
+                this.updateThemeIcon(savedTheme);
+            }
+
+            loadTeamData() {
+                // Sample data - replace with actual data from your storage
+                this.allTeams = {
+                    all: [
+                        { id: 1, name: 'Thunder Strikers', played: 12, wins: 8, losses: 4, winPerc: 66, status: 'high', captain: 'Rahul K', isMyTeam: true, isFavorite: true },
+                        { id: 2, name: 'Royal Challengers', played: 12, wins: 5, losses: 7, winPerc: 41, status: 'low', captain: 'Virat R', isMyTeam: false, isFavorite: false },
+                        { id: 3, name: 'Super Kings', played: 10, wins: 6, losses: 4, winPerc: 60, status: 'medium', captain: 'Dhoni M', isMyTeam: true, isFavorite: true },
+                        { id: 4, name: 'Mumbai Indians', played: 15, wins: 10, losses: 5, winPerc: 66, status: 'high', captain: 'Rohit S', isMyTeam: false, isFavorite: false },
+                        { id: 5, name: 'Delhi Capitals', played: 8, wins: 3, losses: 5, winPerc: 37, status: 'low', captain: 'Pant R', isMyTeam: false, isFavorite: false },
+                        { id: 6, name: 'Sunrisers', played: 11, wins: 7, losses: 4, winPerc: 63, status: 'medium', captain: 'Williamson K', isMyTeam: true, isFavorite: false }
+                    ],
+                    my: [
+                        { id: 1, name: 'Thunder Strikers', played: 12, wins: 8, losses: 4, winPerc: 66, status: 'high', captain: 'Rahul K', isMyTeam: true, isFavorite: true },
+                        { id: 3, name: 'Super Kings', played: 10, wins: 6, losses: 4, winPerc: 60, status: 'medium', captain: 'Dhoni M', isMyTeam: true, isFavorite: true },
+                        { id: 6, name: 'Sunrisers', played: 11, wins: 7, losses: 4, winPerc: 63, status: 'medium', captain: 'Williamson K', isMyTeam: true, isFavorite: false }
+                    ],
+                    favorites: [
+                        { id: 1, name: 'Thunder Strikers', played: 12, wins: 8, losses: 4, winPerc: 66, status: 'high', captain: 'Rahul K', isMyTeam: true, isFavorite: true },
+                        { id: 3, name: 'Super Kings', played: 10, wins: 6, losses: 4, winPerc: 60, status: 'medium', captain: 'Dhoni M', isMyTeam: true, isFavorite: true }
+                    ]
+                };
+
+                this.filteredTeams = [...this.allTeams[this.currentTab]];
+            }
+
+            switchTab(tabName) {
+                this.currentTab = tabName;
+                
+                // Update active tab UI
+                document.querySelectorAll('.teams-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+                
+                // Update filtered teams
+                this.filteredTeams = [...this.allTeams[tabName]];
+                
+                // Re-apply search filter if any
+                const searchValue = document.getElementById('searchTeam').value;
+                if (searchValue) {
+                    this.filterTeams(searchValue);
+                } else {
+                    this.renderTable();
+                }
+            }
+
+            filterTeams(searchTerm) {
+                const term = searchTerm.toLowerCase().trim();
+                
+                if (term === '') {
+                    this.filteredTeams = [...this.allTeams[this.currentTab]];
+                } else {
+                    this.filteredTeams = this.allTeams[this.currentTab].filter(team => 
+                        team.name.toLowerCase().includes(term) || 
+                        team.captain.toLowerCase().includes(term)
+                    );
+                }
+                
+                this.renderTable();
+            }
+
+            renderTable() {
+                const tableBody = document.getElementById('teamsTableBody');
+                const emptyState = document.getElementById('emptyState');
+                
+                if (this.filteredTeams.length === 0) {
+                    tableBody.innerHTML = '';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+                
+                emptyState.style.display = 'none';
+                
+                tableBody.innerHTML = this.filteredTeams.map(team => `
+                    <tr data-team-id="${team.id}">
+                        <td>
+                            <div class="team-info">
+                                <div class="team-avatar">
+                                    ${team.name.split(' ').map(n => n[0]).join('')}
+                                </div>
+                                <div>
+                                    <div class="team-name">${team.name}</div>
+                                    <div class="team-meta">Captain: ${team.captain}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>${team.played}</td>
+                        <td>${team.wins}</td>
+                        <td>${team.losses}</td>
+                        <td>${team.winPerc}%</td>
+                        <td>
+                            <span class="win-percentage win-${team.status}">
+                                ${team.status === 'high' ? 'Excellent' : 
+                                  team.status === 'medium' ? 'Good' : 'Needs Improvement'}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            viewTeamDetails(team) {
+                // Navigate to team details page or show modal
+                console.log('Viewing team:', team.name);
+                // In a real app, you would navigate to team details page
+                // window.location.href = `team_details.html?id=${team.id}`;
+                
+                // For now, show an alert
+                alert(`Viewing details for: ${team.name}\nCaptain: ${team.captain}\nWin Rate: ${team.winPerc}%`);
+            }
+
+            updateStatsOverview() {
+                // Calculate and update overview stats
+                const totalTeams = this.allTeams.all.length;
+                const totalMatches = this.allTeams.all.reduce((sum, team) => sum + team.played, 0);
+                const activeTeams = this.allTeams.all.filter(team => team.played > 0).length;
+                const overallWinRate = Math.round(this.allTeams.all.reduce((sum, team) => sum + team.winPerc, 0) / totalTeams);
+                
+                document.getElementById('totalTeams').textContent = totalTeams;
+                document.getElementById('totalMatches').textContent = totalMatches;
+                document.getElementById('activeTeams').textContent = activeTeams;
+                document.getElementById('winRate').textContent = `${overallWinRate}%`;
+            }
+        }
+
+        // Global functions for modal handling
+        function showCreateTeamModal() {
+            const modal = new bootstrap.Modal(document.getElementById('createTeamModal'));
+            modal.show();
+        }
+
+        function createNewTeam() {
+            const form = document.getElementById('createTeamForm');
+            const teamName = document.getElementById('teamName').value;
+            const teamCaptain = document.getElementById('teamCaptain').value;
+            
+            if (!teamName) {
+                alert('Please enter a team name');
+                return;
+            }
+            
+            // In a real app, you would save this to your database
+            console.log('Creating new team:', { teamName, teamCaptain });
+            
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('createTeamModal'));
+            modal.hide();
+            
+            // Show success message
+            alert(`Team "${teamName}" created successfully!`);
+            
+            // Reset form
+            form.reset();
+        }
+
+        // Initialize the teams page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const teamsPage = new TeamsPage();
+            teamsPage.updateStatsOverview();
+        });
+    </script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

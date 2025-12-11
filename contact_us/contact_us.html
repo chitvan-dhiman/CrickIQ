@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | CrickIQ - Smart Cricket Scoring</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --info-color: #0dcaf0;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --card-bg: #ffffff;
+            --body-bg: #f8f9fa;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-radius: 12px;
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #0d6efd;
+            --card-bg: #1e1e1e;
+            --body-bg: #121212;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.3);
+            --light-color: #2d2d2d;
+        }
+
+        body {
+            background-color: var(--body-bg);
+            color: var(--text-primary);
+            font-family: 'Poppins', sans-serif;
+            padding-top: 70px;
+            padding-bottom: 80px;
+            transition: var(--transition);
+        }
+
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            background: var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: 60px;
+        }
+
+        .logo img {
+            height: 32px;
+			border-radius: 23%;
+        }
+
+        .header-icons i, .header-left i {
+            font-size: 20px;
+            cursor: pointer;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .header-icons i:hover, .header-left i:hover {
+            transform: scale(1.1);
+        }
+
+        .back-arrow {
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .contact-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            margin: 15px 0;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .contact-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .contact-info {
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            background: var(--light-color);
+            transition: var(--transition);
+        }
+
+        .contact-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .contact-details {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .contact-details i {
+            font-size: 1.2rem;
+            margin-right: 12px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .contact-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+        }
+
+        .contact-value {
+            font-weight: 500;
+        }
+
+        .action-btn {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .social-section {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .social-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--light-color);
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            color: white;
+            text-decoration: none;
+        }
+
+        .social-icon.twitter:hover { background: #1DA1F2; }
+        .social-icon.instagram:hover { background: #E4405F; }
+        .social-icon.facebook:hover { background: #1877F2; }
+        .social-icon.youtube:hover { background: #FF0000; }
+
+        .map-container {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            height: 200px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .contact-form {
+            margin-top: 25px;
+        }
+
+        .form-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            border-radius: var(--border-radius);
+            padding: 12px 15px;
+            border: 1px solid rgba(0,0,0,0.1);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+            border-color: var(--primary-color);
+        }
+
+        .submit-btn {
+            background: var(--primary-color);
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 12px 20px;
+            font-weight: 500;
+            width: 100%;
+            transition: var(--transition);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+        }
+
+        .app-bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 70px;
+            background: var(--card-bg);
+            border-top: 1px solid rgba(0,0,0,0.1);
+            z-index: 1030;
+            padding: 0 10px;
+        }
+
+        .app-bottom-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.75rem;
+            text-align: center;
+            flex: 1;
+            padding: 8px 5px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .app-bottom-nav a i {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        .app-bottom-nav a.active {
+            color: var(--primary-color);
+            background: rgba(13, 110, 253, 0.1);
+        }
+
+        .app-bottom-nav a:hover {
+            color: var(--primary-color);
+        }
+
+        .section-title {
+            font-weight: 600;
+            margin: 20px 0 15px 0;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 20px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .toast {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1050;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        @media (max-width: 768px) {
+            .contact-card {
+                padding: 20px 15px;
+                margin: 10px 0;
+            }
+            
+            .social-icons {
+                gap: 15px;
+            }
+            
+            .social-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-left d-flex align-items-center">
+            <i class="fa-solid fa-arrow-left back-arrow" onclick="goBack()"></i>
+        </div>
+        <div class="logo">
+            <img src="../assets/images/logo.png" alt="CrickIQ Logo">
+        </div>
+        <div class="header-icons">
+            <i id="themeToggle" class="fa-solid fa-moon"></i>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mt-3">
+        <div class="section-title">Get In Touch</div>
+        
+        <!-- Contact Card -->
+        <div class="contact-card">
+            <!-- Map -->
+            <div class="map-container">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3432.215641666963!2d76.717623175352!3d30.654284874626086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390feb7dbd16f0a5%3A0x5c3f9b7f3b3b3b3b!2sMohali%2C%20Punjab%2C%20India!5e0!3m2!1sen!2sin!4v1698765432100!5m2!1sen!2sin" 
+                    width="100%" 
+                    height="100%" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-details">
+                        <i class="fa-solid fa-location-dot text-primary"></i>
+                        <div class="contact-text">
+                            <span class="contact-label">Our Location</span>
+                            <span class="contact-value">Mohali, Punjab, India</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-primary action-btn" onclick="openInMaps()">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </button>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-details">
+                        <i class="fa-solid fa-phone text-success"></i>
+                        <div class="contact-text">
+                            <span class="contact-label">Call Us</span>
+                            <span class="contact-value">+00 00 1008 1008</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-success action-btn" onclick="makeCall()">
+                        <i class="fa-solid fa-phone"></i>
+                    </button>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-details">
+                        <i class="fa-solid fa-envelope text-info"></i>
+                        <div class="contact-text">
+                            <span class="contact-label">Email Us</span>
+                            <span class="contact-value">crickqi.info@gmail.com</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-info action-btn" onclick="sendEmail()">
+                        <i class="fa-solid fa-envelope"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Social Media -->
+            <div class="social-section">
+                <div class="social-title">Follow Us</div>
+                <div class="social-icons">
+                    <a href="https://twitter.com/crickqi" class="social-icon twitter" target="_blank">
+                        <i class="fa-brands fa-twitter"></i>
+                    </a>
+                    <a href="https://instagram.com/crickqi" class="social-icon instagram" target="_blank">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="https://facebook.com/crickqi" class="social-icon facebook" target="_blank">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <a href="https://youtube.com/crickqi" class="social-icon youtube" target="_blank">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="contact-form">
+                <div class="social-title">Send us a Message</div>
+                <form id="contactForm">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="email" class="form-control" id="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="mb-3">
+                        <textarea class="form-control" id="message" rows="3" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn submit-btn text-white">
+                        <i class="fa-solid fa-paper-plane me-2"></i>Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="app-bottom-nav">
+        <a href="../index.html">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="../team_list/team_list.html">
+            <i class="fa-solid fa-users"></i>
+            <span>Teams</span>
+        </a>
+        <a href="../start_match/start_match.html">
+            <i class="fa-solid fa-play"></i>
+            <span>Match</span>
+        </a>
+        <a href="../performance/performance.html">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Stats</span>
+        </a>
+    </nav>
+
+    <!-- Toast for notifications -->
+    <div id="toast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" style="display: none;">
+        <div class="d-flex">
+            <div class="toast-body" id="toastMessage">
+                Message sent successfully!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <script>
+        class ContactPage {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.loadTheme();
+                this.setupForm();
+            }
+
+            setupEventListeners() {
+                // Theme toggle
+                document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
+            }
+
+            toggleTheme() {
+                const currentTheme = document.body.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.body.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                this.updateThemeIcon(newTheme);
+            }
+
+            updateThemeIcon(theme) {
+                const icon = document.getElementById('themeToggle');
+                if (theme === 'dark') {
+                    icon.className = 'fa-solid fa-sun';
+                } else {
+                    icon.className = 'fa-solid fa-moon';
+                }
+            }
+
+            loadTheme() {
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.body.setAttribute('data-theme', savedTheme);
+                this.updateThemeIcon(savedTheme);
+            }
+
+            setupForm() {
+                const form = document.getElementById('contactForm');
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleFormSubmit(form);
+                });
+            }
+
+            handleFormSubmit(form) {
+                // Get form data
+                const formData = new FormData(form);
+                const data = {
+                    name: formData.get('name') || document.getElementById('name').value,
+                    email: formData.get('email') || document.getElementById('email').value,
+                    message: formData.get('message') || document.getElementById('message').value
+                };
+
+                // In a real app, you would send this to your backend
+                console.log('Form submitted:', data);
+                
+                // Show success message
+                this.showToast('Message sent successfully! We will get back to you soon.');
+                
+                // Reset form
+                form.reset();
+                
+                // Here you would typically send the data to your server
+                // this.sendToServer(data);
+            }
+
+            showToast(message) {
+                const toast = document.getElementById('toast');
+                const toastMessage = document.getElementById('toastMessage');
+                
+                toastMessage.textContent = message;
+                toast.style.display = 'block';
+                
+                // Hide after 3 seconds
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 3000);
+            }
+
+            sendToServer(data) {
+                // Example implementation for sending data to a server
+                fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    this.showToast('Message sent successfully!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    this.showToast('Failed to send message. Please try again.');
+                });
+            }
+        }
+
+        // Utility functions
+        function goBack() {
+            window.history.back();
+        }
+
+        function openInMaps() {
+            const address = "Mohali, Punjab, India";
+            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+            window.open(mapsUrl, '_blank');
+        }
+
+        function makeCall() {
+            const phoneNumber = "+000010081008";
+            window.open(`tel:${phoneNumber}`);
+        }
+
+        function sendEmail() {
+            const email = "crickqi.info@gmail.com";
+            const subject = "Inquiry about CrickIQ";
+            const body = "Hello CrickIQ team,\n\nI would like to know more about your app.";
+            
+            window.open(`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+        }
+
+        // Initialize the contact page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new ContactPage();
+        });
+    </script>
+</body>
+</html>
