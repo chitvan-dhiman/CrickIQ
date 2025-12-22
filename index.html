@@ -2,661 +2,465 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home | CrickIQ - Smart Cricket Scoring</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CrickIQ - Smart Cricket Scoring</title>
+    <meta name="description" content="CrickIQ - Revolutionizing cricket scoring with intelligent analytics and real-time tracking">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="assets/images/logo.png" as="image">
+    <link rel="preload" href="home.html" as="document">
+    
     <style>
         :root {
             --primary-color: #0d6efd;
-            --secondary-color: #6c757d;
-            --success-color: #198754;
-            --warning-color: #ffc107;
-            --danger-color: #dc3545;
-            --bg-color: #f8f9fa;
-            --card-bg: #ffffff;
-            --text-primary: #212529;
-            --text-secondary: #6c757d;
-            --border-radius: 12px;
-            --shadow: 0 4px 12px rgba(0,0,0,0.1);
-            --transition: all 0.3s ease;
+            --secondary-color: #a4e8f7;
+            --accent-color: #ff6b35;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
-        [data-theme="dark"] {
-            --primary-color: #0d6efd;
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --shadow: 0 4px 12px rgba(0,0,0,0.3);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            background: var(--bg-color);
+            background: var(--gradient);
             font-family: 'Poppins', sans-serif;
-            color: var(--text-primary);
-            transition: var(--transition);
-            padding-top: 70px;
-            padding-bottom: 80px;
-        }
-
-        .app-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1030;
-            background: var(--primary-color);
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            padding: 12px 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            min-height: -webkit-fill-available;
         }
 
-        .logo img {
-            height: 32px;
-			border-radius: 23%;
-        }
-
-        .header-icons i, .header-left i {
-            font-size: 20px;
-            cursor: pointer;
-            color: white;
-            transition: var(--transition);
-        }
-
-        .header-icons i:hover, .header-left i:hover {
-            transform: scale(1.1);
-        }
-
-        /* Sidebar Styles */
-        .sidebar {
-            position: fixed;
+        /* Animated background elements */
+        .bg-bubbles {
+            position: absolute;
             top: 0;
-            left: -300px;
-            width: 280px;
+            left: 0;
+            width: 100%;
             height: 100%;
-            background: var(--card-bg);
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-            transition: var(--transition);
-            z-index: 1040;
-            padding: 80px 20px 20px;
-        }
-
-        .sidebar.active {
-            left: 0;
-        }
-
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 1039;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-        }
-
-        .sidebar-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .sidebar a {
-            display: block;
-            padding: 12px 15px;
-            color: var(--text-primary);
-            text-decoration: none;
-            border-radius: var(--border-radius);
-            margin-bottom: 5px;
-            transition: var(--transition);
-        }
-
-        .sidebar a:hover {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .sidebar a i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-
-        /* Card Styles */
-        .card-team {
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
-            background: var(--card-bg);
-            border: none;
-            transition: var(--transition);
+            z-index: 1;
             overflow: hidden;
         }
 
-        .card-team:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-
-        .card-team img {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
-        }
-
-        .card-team-body {
-            padding: 15px;
-            text-align: center;
-        }
-
-        .team-stats {
-            display: flex;
-            justify-content: space-around;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-top: 8px;
-        }
-
-        .team-stats span {
-            display: block;
-            text-align: center;
-        }
-
-        .team-stats .stat-value {
-            font-weight: 600;
-            color: var(--primary-color);
-            font-size: 1rem;
-        }
-
-        /* Quick Actions */
-        .quick-action-card {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            text-align: center;
-            text-decoration: none;
-            color: var(--text-primary);
-            display: block;
-            transition: var(--transition);
-            border: 2px solid transparent;
-            box-shadow: var(--shadow);
-        }
-
-        .quick-action-card:hover {
-            border-color: var(--primary-color);
-            transform: translateY(-3px);
-            color: var(--text-primary);
-            text-decoration: none;
-        }
-
-        .quick-action-card i {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: var(--primary-color);
-        }
-
-        .quick-action-card .action-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .quick-action-card .action-desc {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        /* Section Titles */
-        .section-title {
-            font-weight: 600;
-            margin: 25px 0 15px 0;
-            font-size: 1.2rem;
-            color: var(--text-primary);
-            position: relative;
-            padding-left: 15px;
-        }
-
-        .section-title::before {
-            content: '';
+        .bg-bubbles li {
             position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 4px;
-            height: 20px;
-            background: var(--primary-color);
-            border-radius: 2px;
-        }
-
-        /* Bottom Navigation */
-        .app-bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            height: 70px;
-            background: var(--card-bg);
-            border-top: 1px solid rgba(0,0,0,0.1);
-            z-index: 1030;
-            padding: 0 10px;
-        }
-
-        .app-bottom-nav a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.75rem;
-            text-align: center;
-            flex: 1;
-            padding: 8px 5px;
-            border-radius: var(--border-radius);
-            transition: var(--transition);
-        }
-
-        .app-bottom-nav a i {
+            list-style: none;
             display: block;
-            font-size: 1.2rem;
-            margin-bottom: 4px;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.15);
+            bottom: -160px;
+            animation: square 20s infinite;
+            border-radius: 50%;
+            transition-timing-function: linear;
         }
 
-        .app-bottom-nav a.active {
-            color: var(--primary-color);
-            background: rgba(13, 110, 253, 0.1);
+        .bg-bubbles li:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .bg-bubbles li:nth-child(2) { left: 20%; width: 80px; height: 80px; animation-delay: 2s; animation-duration: 17s; }
+        .bg-bubbles li:nth-child(3) { left: 25%; animation-delay: 4s; }
+        .bg-bubbles li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 22s; }
+        .bg-bubbles li:nth-child(5) { left: 70%; animation-delay: 3s; }
+        .bg-bubbles li:nth-child(6) { left: 80%; width: 120px; height: 120px; animation-delay: 6s; animation-duration: 25s; }
+        .bg-bubbles li:nth-child(7) { left: 32%; width: 160px; height: 160px; animation-delay: 1s; animation-duration: 30s; }
+        .bg-bubbles li:nth-child(8) { left: 55%; width: 20px; height: 20px; animation-delay: 7s; animation-duration: 40s; }
+        .bg-bubbles li:nth-child(9) { left: 25%; width: 10px; height: 10px; animation-delay: 12s; animation-duration: 35s; }
+        .bg-bubbles li:nth-child(10) { left: 90%; width: 160px; height: 160px; animation-delay: 5s; animation-duration: 28s; }
+
+        @keyframes square {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
         }
 
-        .app-bottom-nav a:hover {
-            color: var(--primary-color);
-        }
-
-        /* Welcome Section */
-        .welcome-section {
+        .splash-container {
+            position: relative;
+            z-index: 2;
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px 0;
+            animation: fadeInUp 1s ease-out;
         }
 
-        .welcome-section h4 {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .welcome-section p {
-            color: var(--text-secondary);
-            margin-bottom: 0;
-        }
-
-        /* Recent Matches */
-        .match-card {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: var(--shadow);
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .match-teams {
+        .logo-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            margin-bottom: 10px;
+            box-shadow: var(--shadow);
+            margin: 0 auto 25px auto;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            animation: pulse 2s infinite ease-in-out, float 3s infinite ease-in-out;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
 
-        .team-name {
-            font-weight: 500;
+        .logo-circle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
         }
 
-        .vs {
-            color: var(--text-secondary);
+        .logo-circle img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .slogan {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1.5s ease-out 0.5s both;
+        }
+
+        .sub-slogan {
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1.5s ease-out 1s both;
+        }
+
+        .progress-container {
+            width: 200px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            margin: 0 auto;
+            overflow: hidden;
+            animation: fadeIn 1.5s ease-out 1.5s both;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 10px;
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: progress 3s ease-in-out forwards;
+        }
+
+        .skip-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
             font-size: 0.8rem;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 3;
         }
 
-        .match-result {
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--success-color);
-            font-weight: 500;
+        .skip-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
 
-        /* Loading Animation */
-        .loading-skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-            border-radius: var(--border-radius);
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        [data-theme="dark"] .loading-skeleton {
-            background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-secondary);
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            opacity: 0.5;
+        @keyframes progress {
+            0% { transform: scaleX(0); }
+            100% { transform: scaleX(1); }
+        }
+
+        /* Loading dots */
+        .loading-dots {
+            display: inline-flex;
+            gap: 4px;
+            margin-top: 20px;
+        }
+
+        .loading-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { 
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .logo-circle {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .logo-circle img {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .slogan {
+                font-size: 1.2rem;
+            }
+            
+            .sub-slogan {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-circle {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .logo-circle img {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .slogan {
+                font-size: 1.1rem;
+            }
+            
+            .sub-slogan {
+                font-size: 0.8rem;
+            }
+            
+            body {
+                padding: 20px;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            .logo-circle, .bg-bubbles, .progress-bar, .loading-dots span {
+                animation: none;
+            }
+            
+            .logo-circle {
+                animation: fadeInUp 1s ease-out;
+            }
         }
     </style>
 </head>
 
 <body>
+    <!-- Animated background -->
+    <ul class="bg-bubbles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
 
-    <!-- Sidebar Overlay -->
-    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+    <!-- Skip button -->
+    <button class="skip-btn" id="skipBtn">
+        Skip <i class="fas fa-forward"></i>
+    </button>
 
-    <!-- Sidebar -->
-    <div id="sidebar" class="sidebar">
-        <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
-        <a href="start_match/start_match.html"><i class="fa-solid fa-play"></i> Start Match</a>
-        <a href="team_list/team_list.html"><i class="fa-solid fa-users"></i> Teams</a>
-        <a href="performance/performance.html"><i class="fa-solid fa-chart-line"></i> Performance</a>
-        <a href="contact_us/contact_us.html"><i class="fa-solid fa-envelope"></i> Contact Us</a>
-        <a href="#" id="themeToggle"><i class="fa-solid fa-moon"></i> Dark Mode</a>
+    <!-- Main content -->
+    <div class="splash-container">
+        <div class="logo-circle">
+            <img src="assets/images/logo.png" alt="CrickIQ Logo" 
+                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiByeD0iNjAiIGZpbGw9IiMwZDZlZmQiLz4KPHN2ZyB4PSIzMCIgeT0iMzAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiPgo8cGF0aCBkPSJNMTIgMTNWMTJNMTIgNlY3TTEyIDE4VjE3TTkgMTVIMTVNOSA5SDE1TTggMjFIMTZNMTYgOEgyME0yMSAxNkgyM002IDhIMkE0IDQgMCAwIDEgMiAxNkg2TTE4IDhIMjJBMiAyIDAgMCAxIDIyIDE2SDE4Ii8+Cjwvc3ZnPgo8L3N2Zz4K'">
+        </div>
+        
+        <h1 class="slogan">Cricket. Reimagined with IQ.</h1>
+        <p class="sub-slogan">Smart scoring • Real-time analytics • Offline support</p>
+        
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+        
+        <div class="loading-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </div>
 
-    <!-- Header -->
-    <header class="app-header">
-        <div class="header-left">
-            <i id="sidebarToggle" class="fa-solid fa-bars"></i>
-        </div>
-        <div class="logo">
-            <img src="assets/images/logo.png" alt="CrickIQ Logo">
-        </div>
-        <div class="header-icons">
-            <i id="darkModeToggle" class="fa-solid fa-moon"></i>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="container">
-
-        <!-- Welcome Section -->
-        <div class="welcome-section">
-            <h4 id="greetingText">Welcome to CrickIQ!</h4>
-            <p class="text-muted">Smart cricket scoring made easy</p>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="section-title">Quick Actions</div>
-        <div class="row g-3 mb-4">
-            <div class="col-6 col-md-3">
-                <a href="start_match/start_match.html" class="quick-action-card">
-                    <i class="fa-solid fa-play-circle"></i>
-                    <div class="action-title">Start Match</div>
-                    <div class="action-desc">Begin new game</div>
-                </a>
-            </div>
-            <div class="col-6 col-md-3">
-                <a href="team_list/team_list.html" class="quick-action-card">
-                    <i class="fa-solid fa-users"></i>
-                    <div class="action-title">Teams</div>
-                    <div class="action-desc">Manage teams</div>
-                </a>
-            </div>
-            <div class="col-6 col-md-3">
-                <a href="performance/performance.html" class="quick-action-card">
-                    <i class="fa-solid fa-chart-bar"></i>
-                    <div class="action-title">Stats</div>
-                    <div class="action-desc">View analytics</div>
-                </a>
-            </div>
-            <div class="col-6 col-md-3">
-                <a href="contact_us/contact_us.html" class="quick-action-card">
-                    <i class="fa-solid fa-headset"></i>
-                    <div class="action-title">Support</div>
-                    <div class="action-desc">Get help</div>
-                </a>
-            </div>
-        </div>
-
-        <!-- Recent Matches -->
-        <div class="section-title">Recent Matches</div>
-        <div id="recentMatches">
-            <!-- Dynamic content will be loaded here -->
-            <div class="loading-skeleton" style="height: 100px; margin-bottom: 10px;"></div>
-            <div class="loading-skeleton" style="height: 100px; margin-bottom: 10px;"></div>
-        </div>
-
-        <!-- Top Teams -->
-        <div class="section-title">Top Teams</div>
-        <div class="row" id="topTeams">
-            <!-- Dynamic content will be loaded here -->
-            <div class="col-6 col-md-4">
-                <div class="loading-skeleton" style="height: 180px;"></div>
-            </div>
-            <div class="col-6 col-md-4">
-                <div class="loading-skeleton" style="height: 180px;"></div>
-            </div>
-            <div class="col-6 col-md-4">
-                <div class="loading-skeleton" style="height: 180px;"></div>
-            </div>
-        </div>
-
-        <!-- About Cricket Section -->
-        <div class="section-title">About CrickIQ</div>
-        <div class="card-team">
-            <div class="card-team-body">
-                <p class="mb-3">CrickIQ is your smart cricket companion that helps you manage matches, track team performance, and analyze player statistics with offline capabilities.</p>
-                <div class="row text-center">
-                    <div class="col-4">
-                        <i class="fa-solid fa-wifi text-muted mb-2"></i>
-                        <div class="small">Offline Support</div>
-                    </div>
-                    <div class="col-4">
-                        <i class="fa-solid fa-bolt text-muted mb-2"></i>
-                        <div class="small">Real-time Scoring</div>
-                    </div>
-                    <div class="col-4">
-                        <i class="fa-solid fa-chart-pie text-muted mb-2"></i>
-                        <div class="small">Advanced Stats</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Bottom Navigation -->
-    <nav class="app-bottom-nav">
-        <a href="index.html" class="active">
-            <i class="fa-solid fa-house"></i>
-            <span>Home</span>
-        </a>
-        <a href="team_list/team_list.html">
-            <i class="fa-solid fa-users"></i>
-            <span>Teams</span>
-        </a>
-        <a href="start_match/start_match.html">
-            <i class="fa-solid fa-play"></i>
-            <span>Match</span>
-        </a>
-        <a href="performance/performance.html">
-            <i class="fa-solid fa-chart-line"></i>
-            <span>Stats</span>
-        </a>
-    </nav>
-
     <script>
-        // Enhanced JavaScript for improved functionality
-        class HomePage {
+        class SplashScreen {
             constructor() {
+                this.redirectTimer = null;
+                this.redirectTime = 4000; // 4 seconds
+                this.startTime = Date.now();
                 this.init();
             }
 
             init() {
                 this.setupEventListeners();
-                this.loadTheme();
-                this.updateGreeting();
-                this.loadDynamicContent();
+                this.startRedirectTimer();
+                this.preloadHomePage();
+                this.checkPerformance();
             }
 
             setupEventListeners() {
-                // Sidebar toggle
-                document.getElementById('sidebarToggle').addEventListener('click', () => this.toggleSidebar());
-                document.getElementById('sidebarOverlay').addEventListener('click', () => this.toggleSidebar());
+                // Skip button
+                document.getElementById('skipBtn').addEventListener('click', () => {
+                    this.redirectToHome();
+                });
 
-                // Theme toggle
-                document.getElementById('darkModeToggle').addEventListener('click', () => this.toggleTheme());
+                // Allow clicking logo to skip (hidden feature)
+                document.querySelector('.logo-circle').addEventListener('dblclick', () => {
+                    this.redirectToHome();
+                });
 
-                // Close sidebar when clicking on links
-                document.querySelectorAll('.sidebar a').forEach(link => {
-                    link.addEventListener('click', () => this.toggleSidebar());
+                // Keyboard skip
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
+                        this.redirectToHome();
+                    }
                 });
             }
 
-            toggleSidebar() {
-                document.getElementById('sidebar').classList.toggle('active');
-                document.getElementById('sidebarOverlay').classList.toggle('active');
+            startRedirectTimer() {
+                this.redirectTimer = setTimeout(() => {
+                    this.redirectToHome();
+                }, this.redirectTime);
             }
 
-            toggleTheme() {
-                const currentTheme = document.body.getAttribute('data-theme');
-                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                
-                document.body.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                
-                this.updateThemeIcon(newTheme);
-            }
-
-            updateThemeIcon(theme) {
-                const icon = document.getElementById('darkModeToggle');
-                if (theme === 'dark') {
-                    icon.className = 'fa-solid fa-sun';
-                } else {
-                    icon.className = 'fa-solid fa-moon';
+            redirectToHome() {
+                // Clear the timer if user skips
+                if (this.redirectTimer) {
+                    clearTimeout(this.redirectTimer);
                 }
-            }
 
-            loadTheme() {
-                const savedTheme = localStorage.getItem('theme') || 'light';
-                document.body.setAttribute('data-theme', savedTheme);
-                this.updateThemeIcon(savedTheme);
-            }
+                // Add fade-out animation
+                document.body.style.opacity = '0';
+                document.body.style.transition = 'opacity 0.3s ease';
 
-            updateGreeting() {
-                const hour = new Date().getHours();
-                const greeting = hour < 12 ? 'Good Morning' : 
-                               hour < 18 ? 'Good Afternoon' : 'Good Evening';
-                document.getElementById('greetingText').textContent = `${greeting}!`;
-            }
-
-            async loadDynamicContent() {
-                // Simulate loading recent matches and top teams
+                // Redirect after fade-out completes
                 setTimeout(() => {
-                    this.renderRecentMatches();
-                    this.renderTopTeams();
-                }, 1000);
+                    window.location.href = 'home.html';
+                }, 300);
             }
 
-            renderRecentMatches() {
-                const matchesContainer = document.getElementById('recentMatches');
-                
-                // Sample data - replace with actual data from your storage
-                const recentMatches = [
-                    { teamA: 'Team Alpha', teamB: 'Team Beta', result: 'Team Alpha won by 24 runs', date: '2024-01-15' },
-                    { teamA: 'Team Gamma', teamB: 'Team Delta', result: 'Team Gamma won by 5 wickets', date: '2024-01-14' }
+            preloadHomePage() {
+                // Preload the home page for faster navigation
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = 'home.html';
+                link.as = 'document';
+                document.head.appendChild(link);
+
+                // Also preload critical resources for home page
+                const criticalResources = [
+                    'assets/css/style.css',
+                    'assets/js/app.js'
                 ];
 
-                if (recentMatches.length === 0) {
-                    matchesContainer.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fa-solid fa-baseball"></i>
-                            <p>No recent matches</p>
-                            <a href="start_match/start_match.html" class="btn btn-primary btn-sm">Start First Match</a>
-                        </div>
-                    `;
-                    return;
-                }
-
-                matchesContainer.innerHTML = recentMatches.map(match => `
-                    <div class="match-card">
-                        <div class="match-teams">
-                            <div class="team-name">${match.teamA}</div>
-                            <div class="vs">vs</div>
-                            <div class="team-name">${match.teamB}</div>
-                        </div>
-                        <div class="match-result">${match.result}</div>
-                        <div class="text-center small text-muted">${new Date(match.date).toLocaleDateString()}</div>
-                    </div>
-                `).join('');
+                criticalResources.forEach(resource => {
+                    const preloadLink = document.createElement('link');
+                    preloadLink.rel = 'preload';
+                    preloadLink.href = resource;
+                    preloadLink.as = resource.endsWith('.css') ? 'style' : 'script';
+                    document.head.appendChild(preloadLink);
+                });
             }
 
-            renderTopTeams() {
-                const teamsContainer = document.getElementById('topTeams');
-                
-                // Sample data - replace with actual data from your storage
-                const topTeams = [
-                    { name: 'Team Alpha', wins: 8, matches: 10, image: 'assets/images/team1.jpg' },
-                    { name: 'Team Gamma', wins: 7, matches: 10, image: 'assets/images/team2.jpg' },
-                    { name: 'Team Beta', wins: 5, matches: 10, image: 'assets/images/team3.jpg' }
-                ];
-
-                teamsContainer.innerHTML = topTeams.map(team => `
-                    <div class="col-6 col-md-4">
-                        <div class="card-team">
-                            <img src="${team.image}" alt="${team.name}" onerror="this.src='assets/images/team-placeholder.jpg'">
-                            <div class="card-team-body">
-                                <strong>${team.name}</strong>
-                                <div class="team-stats">
-                                    <span>
-                                        <div class="stat-value">${team.wins}</div>
-                                        <div>Wins</div>
-                                    </span>
-                                    <span>
-                                        <div class="stat-value">${team.matches}</div>
-                                        <div>Matches</div>
-                                    </span>
-                                    <span>
-                                        <div class="stat-value">${Math.round((team.wins/team.matches)*100)}%</div>
-                                        <div>Win Rate</div>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
+            checkPerformance() {
+                // Log performance metrics
+                window.addEventListener('load', () => {
+                    const loadTime = Date.now() - this.startTime;
+                    console.log(`Splash screen loaded in ${loadTime}ms`);
+                    
+                    // If load time is too long, adjust animation timing
+                    if (loadTime > 1000) {
+                        document.querySelector('.progress-bar').style.animationDuration = '2s';
+                    }
+                });
             }
         }
 
-        // Initialize the home page when DOM is loaded
+        // Initialize splash screen when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
-            new HomePage();
+            new SplashScreen();
         });
 
-        // Add service worker registration for PWA
+        // Service Worker registration for PWA
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
+            window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/service-worker.js')
-                    .then(function(registration) {
-                        console.log('ServiceWorker registration successful');
-                    }, function(err) {
-                        console.log('ServiceWorker registration failed: ', err);
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
                     });
             });
         }
+
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+                // Page is being hidden, clear timer to prevent redirect while in background
+                if (window.splashScreen && window.splashScreen.redirectTimer) {
+                    clearTimeout(window.splashScreen.redirectTimer);
+                }
+            }
+        });
     </script>
 </body>
 
