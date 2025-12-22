@@ -393,7 +393,7 @@
 
                 // Redirect after fade-out completes
                 setTimeout(() => {
-                    window.location.href = 'index.html';
+                    window.location.href = 'home';
                 }, 300);
             }
 
@@ -401,7 +401,7 @@
                 // Preload the home page for faster navigation
                 const link = document.createElement('link');
                 link.rel = 'prefetch';
-                link.href = 'index.html';
+                link.href = 'home';
                 link.as = 'document';
                 document.head.appendChild(link);
 
